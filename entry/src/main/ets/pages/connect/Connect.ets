@@ -1,5 +1,6 @@
 import { IUserInfoModel } from "../../models/user.type"
 import ChatGalaxyStore from "../../utils/ChatGalaxyStore"
+import { router } from "@kit.ArkUI"
 
 @Preview
 @Component
@@ -65,6 +66,11 @@ struct Connect {
             normal: {
               .backgroundColor($r("app.color.white"))
             }
+          })
+          .onClick(() => {
+            router.pushUrl({
+              url: "pages/ChatDetail/ChatDetail"
+            })
           })
         })
       }.width("100%")

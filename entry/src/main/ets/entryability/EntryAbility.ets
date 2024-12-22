@@ -1,6 +1,9 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import ChatGalaxyStore from '../utils/ChatGalaxyStore';
+import { IUserInfoModel } from '../models/user.type';
+import { ChatGalaxyCurrentUserKey } from '../constants';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -15,6 +18,9 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+
+    const currentUser = ChatGalaxyStore.getCurrentUserSync(this.context)
+    AppStorage.setOrCreate<IUserInfoModel>(ChatGalaxyCurrentUserKey, currentUser)
 
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
