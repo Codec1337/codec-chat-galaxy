@@ -1,6 +1,7 @@
 import { router } from '@kit.ArkUI'
 import { ChatGalaxyCurrentUserKey } from '../../constants'
 import { IUserInfo, IUserInfoModel } from '../../models/user.type'
+import BottomInput from './components/BottomInput'
 
 @Entry
 @Component
@@ -39,8 +40,11 @@ struct ChatDetail {
           .height(30)
       }.height(50)
       .width("100%")
-      Text(JSON.stringify(this.currentUser))
+      .expandSafeArea([SafeAreaType.KEYBOARD])
+
+      BottomInput()
     }
+    .justifyContent(FlexAlign.SpaceBetween)
     .height('100%')
     .width('100%')
   }
