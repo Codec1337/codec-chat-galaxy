@@ -9,6 +9,17 @@ struct ChatDetail {
   @StorageProp(ChatGalaxyCurrentUserKey)
   currentUser: IUserInfoModel = new IUserInfoModel({} as IUserInfo)
 
+  @Provide
+  talkUser: IUserInfoModel = new IUserInfoModel({} as IUserInfo)
+
+  aboutToAppear(): void {
+    this.getTalkUser()
+  }
+
+  getTalkUser() {
+    this.talkUser = router.getParams() as IUserInfoModel
+  }
+
   build() {
     Column () {
       Stack({ alignContent: Alignment.Start }) {
@@ -20,7 +31,7 @@ struct ChatDetail {
             router.back()
           })
 
-        Text("小果果")
+        Text(this.talkUser.username)
           .fontColor($r("app.color.text_primary"))
           .fontSize(20)
           .width("100%")

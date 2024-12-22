@@ -69,7 +69,8 @@ struct Connect {
           })
           .onClick(() => {
             router.pushUrl({
-              url: "pages/ChatDetail/ChatDetail"
+              url: "pages/ChatDetail/ChatDetail",
+              params: userItem
             })
           })
         })
