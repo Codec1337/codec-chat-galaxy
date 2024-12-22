@@ -1,4 +1,5 @@
 import { TabBarItemModel } from '../models/TabBar.type';
+import Connect from './connect/Connect';
 
 @Entry
 @Component
@@ -44,10 +45,14 @@ struct Index {
       Tabs({ barPosition: BarPosition.End, index: $$this.selectTabIndex }) {
         ForEach(this.tabList, (item: TabBarItemModel, index: number) => {
           TabContent() {
-            Text(item.name)
+            if (item.name === 'connect') {
+              Connect()
+            } else {
+              Text(item.name)
+            }
           }.tabBar(this.TabBarBuilder(item))
         })
-      }
+      }.animationDuration(100)
     }.height("100%")
     .width('100%')
   }
