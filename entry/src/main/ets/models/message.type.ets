@@ -5,6 +5,7 @@ export interface IMessageInfo {
   id: string
   sendUser: IUserInfo
   receiveUser: IUserInfo
+  messageOwner: IUserInfo // message归属者
   sendTime: number
   messageType: MessageTypeEnum
   sourceFilePath: string // 音视频，图片等文件地址
@@ -23,6 +24,7 @@ export class IMessageInfoModel implements IMessageInfo {
   id: string = ''
   sendUser: IUserInfo = new IUserInfoModel({} as IUserInfo)
   receiveUser: IUserInfo = new IUserInfoModel({} as IUserInfo)
+  messageOwner: IUserInfo = new IUserInfoModel({} as IUserInfo)
   sendTime: number = 0
   messageType: MessageTypeEnum = MessageTypeEnum.TEXT
   sourceFilePath: string = ''
@@ -32,6 +34,7 @@ export class IMessageInfoModel implements IMessageInfo {
     this.id = model.id || util.generateRandomUUID()
     this.sendUser = model.sendUser
     this.receiveUser = model.receiveUser
+    this.messageOwner = model.messageOwner
     this.sendTime = model.sendTime || Date.now()
     this.messageType = model.messageType || MessageTypeEnum.TEXT
     this.sourceFilePath = model.sourceFilePath

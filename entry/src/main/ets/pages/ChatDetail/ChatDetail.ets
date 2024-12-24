@@ -1,5 +1,6 @@
 import { router } from '@kit.ArkUI'
 import { ChatGalaxyCurrentUserKey } from '../../constants'
+import { IMessageInfoModel } from '../../models/message.type'
 import { IUserInfo, IUserInfoModel } from '../../models/user.type'
 import BottomInput from './components/BottomInput'
 import Message from './components/Message'
@@ -13,6 +14,9 @@ struct ChatDetail {
 
   @Provide
   talkUser: IUserInfoModel = new IUserInfoModel({} as IUserInfo)
+
+  @State
+  messageList: IMessageInfoModel[] = []
 
   aboutToAppear(): void {
     this.getTalkUser()
@@ -43,8 +47,10 @@ struct ChatDetail {
       .width("100%")
 
       List() {
-        ForEach([1,2,3], () => {
-          Message()
+        ForEach(this.messageList, (item: IMessageInfoModel) => {
+          Message({
+            messageInfo: item
+          })
         })
       }.layoutWeight(1)
       .width("100%")
