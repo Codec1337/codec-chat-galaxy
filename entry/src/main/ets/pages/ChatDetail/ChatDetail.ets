@@ -2,6 +2,7 @@ import { router } from '@kit.ArkUI'
 import { ChatGalaxyCurrentUserKey } from '../../constants'
 import { IUserInfo, IUserInfoModel } from '../../models/user.type'
 import BottomInput from './components/BottomInput'
+import Message from './components/Message'
 
 @Entry
 @Component
@@ -40,7 +41,14 @@ struct ChatDetail {
           .height(30)
       }.height(50)
       .width("100%")
-      .expandSafeArea([SafeAreaType.KEYBOARD])
+
+      List() {
+        ForEach([1,2,3], () => {
+          Message()
+        })
+      }.layoutWeight(1)
+      .width("100%")
+      .backgroundColor($r("app.color.second_back_color"))
 
       BottomInput()
     }
