@@ -1,7 +1,8 @@
-import { router } from '@kit.ArkUI'
+import { promptAction, router } from '@kit.ArkUI'
 import { ChatGalaxyCurrentUserKey } from '../../constants'
-import { IMessageInfoModel } from '../../models/message.type'
+import { IMessageInfo, IMessageInfoModel } from '../../models/message.type'
 import { IUserInfo, IUserInfoModel } from '../../models/user.type'
+import { getChatMessage } from '../../utils/request'
 import BottomInput from './components/BottomInput'
 import Message from './components/Message'
 
@@ -24,6 +25,24 @@ struct ChatDetail {
 
   getTalkUser() {
     this.talkUser = router.getParams() as IUserInfoModel
+  }
+
+  async textInputContentSubmit(content: string) {
+    const message = new IMessageInfoModel({
+      messageContent: content,
+      sendUser: this.currentUser,
+      receiveUser: this.talkUser,
+      messageOwner: this.talkUser
+    } as IMessageInfo)
+    this.messageList.push(message)
+    const res = await getChatMessage(content, this.currentUser)
+    const resMessage = new IMessageInfoModel({
+      messageContent: res?.data?.info?.text,
+      sendUser: this.talkUser,
+      receiveUser: this.currentUser,
+      messageOwner: this.talkUser
+    } as IMessageInfo)
+    this.messageList.push(resMessage)
   }
 
   build() {
@@ -49,14 +68,18 @@ struct ChatDetail {
       List() {
         ForEach(this.messageList, (item: IMessageInfoModel) => {
           Message({
-            messageInfo: item
+            messageInfo: item,
           })
         })
       }.layoutWeight(1)
       .width("100%")
       .backgroundColor($r("app.color.second_back_color"))
 
-      BottomInput()
+      BottomInput({
+        textInputContentSubmit: (content: string) => {
+          this.textInputContentSubmit(content)
+        }
+      })
     }
     .justifyContent(FlexAlign.SpaceBetween)
     .height('100%')

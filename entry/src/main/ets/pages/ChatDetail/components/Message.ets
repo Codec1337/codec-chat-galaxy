@@ -19,12 +19,12 @@ struct Message {
 
   build() {
     Row({ space: 6 }) {
-      Image("https://q1.itc.cn/q_70/images03/20240414/d477378709494a9e8adf154fb5200feb.jpeg")
+      Image(this.messageInfo?.sendUser?.avatar)
         .width(25)
         .height(25)
         .borderRadius(2)
       Row() {
-        Text("你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀你好呀")
+        Text(this.messageInfo.messageContent)
           .fontSize(14)
           .backgroundColor(this.isCurrentUserMessage ? $r("app.color.second_primary") : $r("app.color.white"))
           .padding({
