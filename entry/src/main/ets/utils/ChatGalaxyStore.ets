@@ -1,5 +1,7 @@
 import { preferences } from "@kit.ArkData";
-import { ChatGalaxyCurrentUserKey, ChatGalaxyStoreKey, ChatGalaxyUserConnectKey } from "../constants";
+import { ChatGalaxyCurrentUserKey, ChatGalaxyStoreKey, ChatGalaxyUserConnectKey,
+  ChatGalaxyUserRecordPrefixKey } from "../constants";
+import { IMessageInfoModel } from "../models/message.type";
 import { defaultConnectList, defaultCurrentUser } from "../models/user";
 import { IUserInfoModel } from "../models/user.type";
 
@@ -18,5 +20,16 @@ export default class ChatGalaxyStore {
   static getCurrentUserSync(context?: Context): IUserInfoModel {
     const store = ChatGalaxyStore.getChatGalaxyStoreSync(context)
     return JSON.parse(store.getSync(ChatGalaxyCurrentUserKey, JSON.stringify(defaultCurrentUser) as string) as string) as IUserInfoModel
+  }
+  // 获取和某一用户聊天信息列表
+  static getUserChatRecordsSync(user: IUserInfoModel) {
+    const store = ChatGalaxyStore.getChatGalaxyStoreSync()
+    return JSON.parse(store.getSync(`${ChatGalaxyUserRecordPrefixKey}_${user.user_id}`, "[]") as string) as IMessageInfoModel[]
+  }
+  // 存储和某一用户聊天信息列表
+  static async putUserChatRecords(user: IUserInfoModel, messageList: IMessageInfoModel[]) {
+    const store = ChatGalaxyStore.getChatGalaxyStoreSync()
+    store.putSync(`${ChatGalaxyUserRecordPrefixKey}_${user.user_id}`, JSON.stringify(messageList))
+    await store.flush()
   }
 }

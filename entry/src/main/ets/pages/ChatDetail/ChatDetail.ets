@@ -2,6 +2,7 @@ import { promptAction, router } from '@kit.ArkUI'
 import { ChatGalaxyCurrentUserKey } from '../../constants'
 import { IMessageInfo, IMessageInfoModel } from '../../models/message.type'
 import { IUserInfo, IUserInfoModel } from '../../models/user.type'
+import ChatGalaxyStore from '../../utils/ChatGalaxyStore'
 import { getChatMessage } from '../../utils/request'
 import BottomInput from './components/BottomInput'
 import Message from './components/Message'
@@ -19,12 +20,20 @@ struct ChatDetail {
   @State
   messageList: IMessageInfoModel[] = []
 
+  listScroller: Scroller = new Scroller()
+
   aboutToAppear(): void {
     this.getTalkUser()
   }
 
+  getTalkerUserMessageList() {
+    const messageList = ChatGalaxyStore.getUserChatRecordsSync(this.talkUser)
+    this.messageList = messageList
+  }
+
   getTalkUser() {
     this.talkUser = router.getParams() as IUserInfoModel
+    this.getTalkerUserMessageList()
   }
 
   async textInputContentSubmit(content: string) {
@@ -35,6 +44,8 @@ struct ChatDetail {
       messageOwner: this.talkUser
     } as IMessageInfo)
     this.messageList.push(message)
+    this.listScroller.scrollEdge(Edge.Bottom)
+    ChatGalaxyStore.putUserChatRecords(this.talkUser, this.messageList)
     const res = await getChatMessage(content, this.currentUser)
     const resMessage = new IMessageInfoModel({
       messageContent: res?.data?.info?.text,
@@ -43,6 +54,8 @@ struct ChatDetail {
       messageOwner: this.talkUser
     } as IMessageInfo)
     this.messageList.push(resMessage)
+    this.listScroller.scrollEdge(Edge.Bottom)
+    ChatGalaxyStore.putUserChatRecords(this.talkUser, this.messageList)
   }
 
   build() {
@@ -65,15 +78,20 @@ struct ChatDetail {
       }.height(50)
       .width("100%")
 
-      List() {
+      List({ scroller: this.listScroller }) {
         ForEach(this.messageList, (item: IMessageInfoModel) => {
-          Message({
-            messageInfo: item,
-          })
+          ListItem() {
+            Message({
+              messageInfo: item,
+            })
+          }
         })
       }.layoutWeight(1)
       .width("100%")
       .backgroundColor($r("app.color.second_back_color"))
+      .onAreaChange(() => {
+        this.listScroller.scrollEdge(Edge.Bottom)
+      })
 
       BottomInput({
         textInputContentSubmit: (content: string) => {
