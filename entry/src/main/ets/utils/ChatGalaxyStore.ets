@@ -32,4 +32,11 @@ export default class ChatGalaxyStore {
     store.putSync(`${ChatGalaxyUserRecordPrefixKey}_${user.user_id}`, JSON.stringify(messageList))
     await store.flush()
   }
+  // 存储和某一用户聊天信息
+  static async putUserChatRecord(user: IUserInfoModel, message: IMessageInfoModel) {
+    const store = ChatGalaxyStore.getChatGalaxyStoreSync()
+    const records = ChatGalaxyStore.getUserChatRecordsSync(user)
+    records.push(message)
+    await ChatGalaxyStore.putUserChatRecords(user, records)
+  }
 }

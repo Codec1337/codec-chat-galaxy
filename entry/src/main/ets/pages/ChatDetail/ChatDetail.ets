@@ -1,4 +1,4 @@
-import { promptAction, router } from '@kit.ArkUI'
+import { router } from '@kit.ArkUI'
 import { ChatGalaxyCurrentUserKey } from '../../constants'
 import { IMessageInfo, IMessageInfoModel } from '../../models/message.type'
 import { IUserInfo, IUserInfoModel } from '../../models/user.type'
@@ -55,7 +55,7 @@ struct ChatDetail {
     } as IMessageInfo)
     this.messageList.push(resMessage)
     this.listScroller.scrollEdge(Edge.Bottom)
-    ChatGalaxyStore.putUserChatRecords(this.talkUser, this.messageList)
+    ChatGalaxyStore.putUserChatRecord(this.talkUser, resMessage)
   }
 
   build() {
