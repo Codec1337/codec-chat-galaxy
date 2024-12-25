@@ -4,6 +4,7 @@ import { ChatGalaxyCurrentUserKey, ChatGalaxyStoreKey, ChatGalaxyUserConnectKey,
 import { IMessageInfoModel } from "../models/message.type";
 import { defaultConnectList, defaultCurrentUser } from "../models/user";
 import { IUserInfoModel } from "../models/user.type";
+import { promptAction } from "@kit.ArkUI";
 
 export default class ChatGalaxyStore {
   static getChatGalaxyStoreSync(context?: Context) {
@@ -38,5 +39,28 @@ export default class ChatGalaxyStore {
     const records = ChatGalaxyStore.getUserChatRecordsSync(user)
     records.push(message)
     await ChatGalaxyStore.putUserChatRecords(user, records)
+  }
+  // 获取和所有用户的最新的聊天记录
+  static getAllUserLastRecord() {
+    const store = ChatGalaxyStore.getChatGalaxyStoreSync()
+    const allRecord = store.getAllSync() as object
+    const arr: IMessageInfoModel[] = []
+
+    Object.keys(allRecord).forEach((key) => {
+      if (key.startsWith(ChatGalaxyUserRecordPrefixKey)) {
+        if (allRecord[key] as string) {
+          // const record = JSON.parse(allRecord[key] as string)
+
+          const records = JSON.parse(allRecord[key]) as IMessageInfoModel[]
+          if (records.length > 0) {
+            arr.push(records[(records.length - 1) as number] as IMessageInfoModel)
+          }
+
+        }
+      }
+    })
+    return arr.sort((a: IMessageInfoModel, b: IMessageInfoModel) => {
+      return b.sendTime - a.sendTime
+    })
   }
 }

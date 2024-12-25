@@ -1,4 +1,5 @@
 import { TabBarItemModel } from '../models/TabBar.type';
+import ChatGalaxyStore from '../utils/ChatGalaxyStore';
 import Connect from './connect/Connect';
 
 @Entry
