@@ -41,7 +41,7 @@ export default class ChatGalaxyStore {
     await ChatGalaxyStore.putUserChatRecords(user, records)
   }
   // 获取和所有用户的最新的聊天记录
-  static getAllUserLastRecord() {
+  static getAllUserLastRecordSync() {
     const store = ChatGalaxyStore.getChatGalaxyStoreSync()
     const allRecord = store.getAllSync() as object
     const arr: IMessageInfoModel[] = []

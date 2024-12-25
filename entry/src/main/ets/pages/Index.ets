@@ -1,5 +1,6 @@
 import { TabBarItemModel } from '../models/TabBar.type';
 import ChatGalaxyStore from '../utils/ChatGalaxyStore';
+import Chat from './chat/Chat';
 import Connect from './connect/Connect';
 
 @Entry
@@ -9,8 +10,8 @@ struct Index {
 
   tabList: TabBarItemModel[] = [{
     icon: $r('app.media.ic_public_message'),
-    name: 'wechat',
-    title: '微信',
+    name: 'chat',
+    title: '聊天',
     selectIcon: $r('app.media.ic_public_message_filled')
   }, {
     icon: $r('app.media.ic_public_contacts_group'),
@@ -48,6 +49,8 @@ struct Index {
           TabContent() {
             if (item.name === 'connect') {
               Connect()
+            } else if (item.name === 'chat') {
+              Chat()
             } else {
               Text(item.name)
             }
