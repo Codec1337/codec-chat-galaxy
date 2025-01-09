@@ -45,7 +45,7 @@ struct ChatDetail {
     } as IMessageInfo)
     this.messageList.push(message)
     this.listScroller.scrollEdge(Edge.Bottom)
-    ChatGalaxyStore.putUserChatRecords(this.talkUser, this.messageList)
+    await ChatGalaxyStore.putUserChatRecords(this.talkUser, this.messageList)
     const res = await getChatMessage(content, this.currentUser)
     const resMessage = new IMessageInfoModel({
       messageContent: res?.data?.info?.text,
