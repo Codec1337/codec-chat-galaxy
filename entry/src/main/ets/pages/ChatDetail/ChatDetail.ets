@@ -1,11 +1,12 @@
 import { router } from '@kit.ArkUI'
-import { ChatGalaxyCurrentUserKey } from '../../constants'
+import { ChatGalaxyCurrentUserKey, ChatGalaxyUserMessUpdateKey } from '../../constants'
 import { IMessageInfo, IMessageInfoModel } from '../../models/message.type'
 import { IUserInfo, IUserInfoModel } from '../../models/user.type'
 import ChatGalaxyStore from '../../utils/ChatGalaxyStore'
 import { getChatMessage } from '../../utils/request'
 import BottomInput from './components/BottomInput'
 import Message from './components/Message'
+import { emitter } from '@kit.BasicServicesKit'
 
 @Entry
 @Component
@@ -56,6 +57,7 @@ struct ChatDetail {
     this.messageList.push(resMessage)
     this.listScroller.scrollEdge(Edge.Bottom)
     ChatGalaxyStore.putUserChatRecord(this.talkUser, resMessage)
+    emitter.emit(ChatGalaxyUserMessUpdateKey)
   }
 
   build() {

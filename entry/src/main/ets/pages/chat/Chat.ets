@@ -2,6 +2,8 @@ import { IMessageInfoModel } from "../../models/message.type"
 import ChatGalaxyStore from "../../utils/ChatGalaxyStore"
 import dayjs from "dayjs"
 import { router } from "@kit.ArkUI"
+import { emitter } from "@kit.BasicServicesKit"
+import { ChatGalaxyUserMessUpdateKey } from "../../constants"
 
 @Component
 struct Chat {
@@ -9,6 +11,9 @@ struct Chat {
 
   aboutToAppear(): void {
     this.getRecordList()
+    emitter.on(ChatGalaxyUserMessUpdateKey, () => {
+      this.getRecordList()
+    })
   }
 
   formatTime(timestamp: number): string {
@@ -17,6 +22,10 @@ struct Chat {
 
   getRecordList() {
     this.recordList = ChatGalaxyStore.getAllUserLastRecordSync()
+  }
+
+  aboutToDisappear(): void {
+    emitter.off(ChatGalaxyUserMessUpdateKey)
   }
 
   build() {
